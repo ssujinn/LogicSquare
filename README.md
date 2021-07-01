@@ -1,4 +1,9 @@
 # Embedded System Software Project <Logic Square>
+## Target Board Environment
+- Freescale i.MX 6 Quadcore (Cortex-A9 based, 1.2GHz)
+- Linux 3.10.17
+- Android 4.3 Jellybean
+  
 ## Introduction
 Square Logic(네모 로직)은 일본에서 개발된 퍼즐로, 영어로는 Nonograms, Picross, Griddlers 등으로 불린다. 규칙은 X×Y 크기(주로 5x5 단위)의 직사각형에 각각 적혀있는 숫자를 보고 숨어있는 숫자를 예측해서 지우고 그려 나가면서 그림을 만들어가는 게임이다. 네모 로직의 규칙은 아래와 같다.
 -	쓰인 숫자만큼의 연속된 칸을 칠해야 한다.
