@@ -19,7 +19,7 @@ Square Logic(네모 로직)은 일본에서 개발된 퍼즐로, 영어로는 No
 - 레벨 클리어 후 메인 또는 다음 레벨로 이동할 수 있다.
 
 ## Developments
-### Android Programming & JNI
+### Android Programming
 #### MainActivity
 -	사용자 정보 입력 후 user-info.txt 읽기
 -	파일 정보 유저 클레스 어레이에 저장
@@ -27,7 +27,7 @@ Square Logic(네모 로직)은 일본에서 개발된 퍼즐로, 영어로는 No
 -	Intent -> GameActivity
 -	Intent data: user name, user level
 
-### GameActivity
+#### GameActivity
 -	Intent로 받아온 level에 따라 game 로드 하고 레벨과 유저 이름을 화면에 출력
 -	5x5의 25개 버튼으로 구성, 각 버튼의 onClickListener는 클릭 시 버튼의 색깔을 Black <-> White로 전환한다.
 -	버튼 클릭 마다 현재 상태를 array 형태로 클래스에 저장한다.
@@ -36,14 +36,14 @@ Square Logic(네모 로직)은 일본에서 개발된 퍼즐로, 영어로는 No
 -	Intent: EndActivity
 -	Intent data: {user name, user level}
   
-### EndActivity
+#### EndActivity
 -	유저 레벨을 파일에 업데이트
 -	시스템콜로부터 계산된 점수를 Score에 출력
 -	NextLevel -> Intent(GameActivity), Intent data: {user name, user level}
 -	Main -> Intent(EndActivity), Intent data: X
   
 ### JNI
-1. Dot Matrix 출력
+#### Dot Matrix 출력
 - 자바함수
 native void printDot(int[] square_status)
 -	C 함수
@@ -53,6 +53,33 @@ jintArray -> 퍼즐의 현재 상태
 -	역할
 디바이스 드라이버 호출하여 현재 퍼즐 상태를 Dot matrix에 출력
 
+#### FND 출력
+-	자바 함수
+native void printFnd(int lv)
+-	C 함수
+JNIEXPORT void JNICALL Java_com_example_logicsquare_GameActivity_printFnd(JNIEnv *env, jobject this, jint lv)
+-	Parameter
+Jint -> 사용자의 레벨을 FND에 출력
+-	역할
+사용자의 레벨을 받아서 디바이스 드라이버를 통해 FND에 레벨 출력
+  
+#### System Call 호출
+-	자바 함수
+native int nowScore(int lv)
+-	C 함수
+JNIEXPORT void JNICALL Java_com_example_logicsquare_EndActivity_nowScore (JNIEnv *env, jobject this, jint lv)
+-	Parameter
+Jint -> 사용자의 레벨을 통해 score 계산
+-	
+새로 만든 시스템콜(syscall number: 379)을 호출하여 레벨을 전달하고 레벨에 따른 score를 계산하여 반환
 
 ### System call
+-	System call number: 379
+-	System call name: logiccall
+-	역할: 사용자로부터 레벨 데이터를 전달받아 스코어를 계산 후 다시 사용자에게 return 한다.
+
 ### Device Driver (Module Programming)
+-	디바이스 이름: “/dev/fpga_device”
+-	Major number: 270
+-	FND와 dot matrix 2가지 디바이스를 제어해야 하므로 Ioctl을 사용하였으며 ioctl의 command는 dot matrix에 출력하는 RUN_DOT(0)과 FND를 출력하는 RUN_FND(1) 2가지이다.
+-	디바이스는 모듈 init 시 ioremap을 통해 매핑하여 사용하고, 모듈 exit할 때 iounmap을 통해 언매핑한다.
