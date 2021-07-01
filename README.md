@@ -44,33 +44,33 @@ Square Logic(네모 로직)은 일본에서 개발된 퍼즐로, 영어로는 No
   
 ### JNI
 #### Dot Matrix 출력
-- 자바함수
+- 자바함수<br>
 native void printDot(int[] square_status)
--	C 함수
+-	C 함수<br>
 JNIEXPORT void JNICALL Java_com_example_logicsquare_GameActivity_printDot(JNIEnv *env, jobject this, jintArray square_status)
--	Parameter
+-	Parameter<br>
 jintArray -> 퍼즐의 현재 상태
--	역할
+-	역할<br>
 디바이스 드라이버 호출하여 현재 퍼즐 상태를 Dot matrix에 출력
 
 #### FND 출력
--	자바 함수
+-	자바 함수<br>
 native void printFnd(int lv)
--	C 함수
+-	C 함수<br>
 JNIEXPORT void JNICALL Java_com_example_logicsquare_GameActivity_printFnd(JNIEnv *env, jobject this, jint lv)
--	Parameter
+-	Parameter<br>
 Jint -> 사용자의 레벨을 FND에 출력
--	역할
+-	역할<br>
 사용자의 레벨을 받아서 디바이스 드라이버를 통해 FND에 레벨 출력
   
 #### System Call 호출
--	자바 함수
+-	자바 함수<br>
 native int nowScore(int lv)
--	C 함수
+-	C 함수<br>
 JNIEXPORT void JNICALL Java_com_example_logicsquare_EndActivity_nowScore (JNIEnv *env, jobject this, jint lv)
--	Parameter
+-	Parameter<br>
 Jint -> 사용자의 레벨을 통해 score 계산
--	
+- 역할<br>
 새로 만든 시스템콜(syscall number: 379)을 호출하여 레벨을 전달하고 레벨에 따른 score를 계산하여 반환
 
 ### System call
