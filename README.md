@@ -27,5 +27,32 @@ Square Logic(네모 로직)은 일본에서 개발된 퍼즐로, 영어로는 No
 -	Intent -> GameActivity
 -	Intent data: user name, user level
 
+### GameActivity
+-	Intent로 받아온 level에 따라 game 로드 하고 레벨과 유저 이름을 화면에 출력
+-	5x5의 25개 버튼으로 구성, 각 버튼의 onClickListener는 클릭 시 버튼의 색깔을 Black <-> White로 전환한다.
+-	버튼 클릭 마다 현재 상태를 array 형태로 클래스에 저장한다.
+-	Answer array와 현재 상태가 동일하면 게임 클리어로 간주하고 EndActivity로 전환한다.
+-	현재 레벨을 FND에 띄워주고 현재 퍼즐 상태를 Dot Matrix에 출력한다.
+-	Intent: EndActivity
+-	Intent data: {user name, user level}
+  
+### EndActivity
+-	유저 레벨을 파일에 업데이트
+-	시스템콜로부터 계산된 점수를 Score에 출력
+-	NextLevel -> Intent(GameActivity), Intent data: {user name, user level}
+-	Main -> Intent(EndActivity), Intent data: X
+  
+### JNI
+1. Dot Matrix 출력
+- 자바함수
+native void printDot(int[] square_status)
+-	C 함수
+JNIEXPORT void JNICALL Java_com_example_logicsquare_GameActivity_printDot(JNIEnv *env, jobject this, jintArray square_status)
+-	Parameter
+jintArray -> 퍼즐의 현재 상태
+-	역할
+디바이스 드라이버 호출하여 현재 퍼즐 상태를 Dot matrix에 출력
+
+
 ### System call
 ### Device Driver (Module Programming)
